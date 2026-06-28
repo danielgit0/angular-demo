@@ -26,18 +26,12 @@
     {
       "name": "Administrators",
       "path": "/Administrators",
-      "realmRoles": [
-        "admin_role",
-        "manager_role"
-      ]
+      "realmRoles": ["admin_role", "manager_role"]
     },
     {
       "name": "Users",
       "path": "/Users",
-      "realmRoles": [
-        "user_role",
-        "auditor_role"
-      ]
+      "realmRoles": ["user_role", "auditor_role"]
     }
   ],
   "clientScopes": [
@@ -105,36 +99,19 @@
   "scopeMappings": [
     {
       "clientScope": "company_read",
-      "roles": [
-        "admin_role",
-        "manager_role",
-        "user_role",
-        "auditor_role"
-      ]
+      "roles": ["admin_role", "manager_role", "user_role", "auditor_role"]
     },
     {
       "clientScope": "company_write",
-      "roles": [
-        "admin_role",
-        "manager_role"
-      ]
+      "roles": ["admin_role", "manager_role"]
     },
     {
       "clientScope": "profile_read",
-      "roles": [
-        "admin_role",
-        "manager_role",
-        "user_role",
-        "auditor_role"
-      ]
+      "roles": ["admin_role", "manager_role", "user_role", "auditor_role"]
     },
     {
       "clientScope": "profile_write",
-      "roles": [
-        "admin_role",
-        "manager_role",
-        "user_role"
-      ]
+      "roles": ["admin_role", "manager_role", "user_role"]
     }
   ],
   "users": [
@@ -152,13 +129,8 @@
           "temporary": false
         }
       ],
-      "groups": [
-        "Administrators"
-      ],
-      "realmRoles": [
-        "default-roles-demo",
-        "offline_access"
-      ]
+      "groups": ["Administrators"],
+      "realmRoles": ["default-roles-demo", "offline_access"]
     },
     {
       "username": "alice",
@@ -174,13 +146,8 @@
           "temporary": false
         }
       ],
-      "groups": [
-        "Users"
-      ],
-      "realmRoles": [
-        "default-roles-demo",
-        "offline_access"
-      ]
+      "groups": ["Users"],
+      "realmRoles": ["default-roles-demo", "offline_access"]
     }
   ],
   "clients": [
@@ -192,9 +159,7 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "secret": "secret",
-      "redirectUris": [
-        "http://localhost:8081/*"
-      ],
+      "redirectUris": ["http://localhost:8081/*"],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -217,12 +182,8 @@
       "bearerOnly": false,
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
-      "redirectUris": [
-        "http://localhost:4200/*"
-      ],
-      "webOrigins": [
-        "http://localhost:4200"
-      ],
+      "redirectUris": ["http://localhost:4200/*"],
+      "webOrigins": ["http://localhost:4200"],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -247,12 +208,8 @@
       "directAccessGrantsEnabled": true,
       "serviceAccountsEnabled": true,
       "secret": "secret",
-      "redirectUris": [
-        "http://localhost:8081/*"
-      ],
-      "webOrigins": [
-        "http://localhost:8081"
-      ],
+      "redirectUris": ["http://localhost:8081/*"],
+      "webOrigins": ["http://localhost:8081"],
       "defaultClientScopes": [
         "web-origins",
         "acr",

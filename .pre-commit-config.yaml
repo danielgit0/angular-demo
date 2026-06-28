@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0  # Use the latest stable version
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -9,6 +9,9 @@ repos:
         args: [ --allow-multiple-documents ]
       - id: detect-private-key
       - id: check-added-large-files
+      - id: check-json
+        # Exclude Angular tsconfig files because they contain comments (JSONC)
+        exclude: ^frontend/tsconfig.*\.json$
   - repo: local
     hooks:
       - id: gradle-spotless-apply
@@ -17,24 +20,71 @@ repos:
         args: [ "spotlessApply" ]
         language: system
         types: [ java ]
-        pass_filenames: false # prevent filenames used as arguments during the execution
+        pass_filenames: false
       - id: gradle-checkstyle
         name: Gradle Checkstyle - Linting
         entry: ./gradlew
         args: [ "checkstyleMain" ]
         language: system
         types: [ java ]
-        pass_filenames: false # prevent filenames used as arguments during the execution
+        pass_filenames: false
       - id: pmd
         name: Programming Mistake Detector
         entry: ./gradlew
         args: [ "pmdMain" ]
         language: system
         types: [ java ]
-        pass_filenames: false # prevent filenames used as arguments during the execution
+        pass_filenames: false
       - id: gradle-build
         name: Build Project
         entry: ./gradlew
         args: [ "build", "--dry-run" ]
+        language: system
+        pass_filenames: false
+
+      # ----------------------------------------------------
+      # ANGULAR HOOKS (Fixed Directory Context)
+      # ----------------------------------------------------
+      - id: check-node-version
+        name: Check Node.js Version
+        entry: |
+          bash -c "
+          if [ -f .nvmrc ]; then
+            T_VER=$(cat .nvmrc | tr -d '[:space:]');
+          elif [ -f frontend/.nvmrc ]; then
+            T_VER=$(cat frontend/.nvmrc | tr -d '[:space:]');
+          else
+            T_VER='24';
+          fi;
+          if [ -s '$HOME/.nvm/nvm.sh' ]; then
+            source '$HOME/.nvm/nvm.sh' && nvm use '$T_VER' --silent || true;
+          elif command -v fnm &> /dev/null; then
+            eval $(fnm env --use-on-cd) || true;
+          fi;
+          NODE_MAJOR=$(node -v | cut -d'v' -f2 | cut -d'.' -f1);
+          if [ '$NODE_MAJOR' -ne '$T_VER' ]; then
+            echo 'Error: Project requires Node v'$T_VER'. Found v'$NODE_MAJOR'.';
+            echo 'If using an IDE, launch it from terminal using \"code .\" or \"open -a IDE\" to sync path variables.';
+            exit 1;
+          fi"
+        language: system
+        pass_filenames: false
+
+      - id: angular-prettier
+        name: Prettier - Frontend Formatting
+        entry: npx prettier --write
+        language: system
+        types_or: [ ts, html, css, scss, json ]
+        files: ^frontend/src/
+
+      - id: angular-lint
+        name: Angular Linting
+        entry: bash -c 'cd frontend && npx ng lint'
+        language: system
+        pass_filenames: false
+
+      - id: angular-test
+        name: Angular Unit Tests
+        entry: bash -c 'cd frontend && npx ng test --watch=false --browsers=firefox'
         language: system
         pass_filenames: false
