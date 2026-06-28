@@ -1,0 +1,54 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: angular-demo
+  docker:
+    compose:
+      enabled: false
+      file: classpath:docker/compose.yml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/demo
+          jwk-set-uri: http://localhost:8080/realms/demo/protocol/openid-connect/certs
+      client:
+        registration:
+          keycloak-backend:
+            provider: keycloak-provider
+            client-id: backend
+            client-secret: secret
+            authorization-grant-type: client_credentials
+            scope:
+              - company_read
+              - profile_read
+        provider:
+          keycloak-provider:
+            issuer-uri: http://localhost:8080/realms/demo
+
+keycloak:
+  admin:
+    server-url: http://localhost:8080
+    realm: demo
+    client-id: backend
+    client-secret: secret
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    url: /openapi/openapi.yml
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    org.springframework.web: DEBUG

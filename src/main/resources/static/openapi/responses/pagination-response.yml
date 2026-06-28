@@ -1,0 +1,21 @@
+components:
+  schemas:
+    PaginationResponse:
+      title: PaginationResponse
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        previousPage:
+          type: integer
+          format: int32
+        currentPage:
+          type: integer
+          format: int32
+        nextPage:
+          type: integer
+          format: int32

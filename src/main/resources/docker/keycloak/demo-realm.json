@@ -1,0 +1,272 @@
+{
+  "id": "demo",
+  "realm": "demo",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "admin_role",
+        "description": "Role for administrators"
+      },
+      {
+        "name": "user_role",
+        "description": "Role for regular users"
+      },
+      {
+        "name": "manager_role",
+        "description": "Role for managers"
+      },
+      {
+        "name": "auditor_role",
+        "description": "Role for read-only system auditors"
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "Administrators",
+      "path": "/Administrators",
+      "realmRoles": [
+        "admin_role",
+        "manager_role"
+      ]
+    },
+    {
+      "name": "Users",
+      "path": "/Users",
+      "realmRoles": [
+        "user_role",
+        "auditor_role"
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "company_read",
+      "description": "Permission to read companies.",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "name": "company_write",
+      "description": "Permission to create/edit/delete companies.",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "name": "profile_read",
+      "description": "Permission to read profiles.",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "name": "profile_write",
+      "description": "Permission to create/edit/delete profiles.",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "name": "groups",
+      "description": "Maps the groups membership to the token.",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      },
+      "protocolMappers": [
+        {
+          "name": "groups-mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "claim.name": "groups"
+          }
+        }
+      ]
+    }
+  ],
+  "scopeMappings": [
+    {
+      "clientScope": "company_read",
+      "roles": [
+        "admin_role",
+        "manager_role",
+        "user_role",
+        "auditor_role"
+      ]
+    },
+    {
+      "clientScope": "company_write",
+      "roles": [
+        "admin_role",
+        "manager_role"
+      ]
+    },
+    {
+      "clientScope": "profile_read",
+      "roles": [
+        "admin_role",
+        "manager_role",
+        "user_role",
+        "auditor_role"
+      ]
+    },
+    {
+      "clientScope": "profile_write",
+      "roles": [
+        "admin_role",
+        "manager_role",
+        "user_role"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "bob",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Bob",
+      "lastName": "Admin",
+      "email": "bob@demo.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "bob",
+          "temporary": false
+        }
+      ],
+      "groups": [
+        "Administrators"
+      ],
+      "realmRoles": [
+        "default-roles-demo",
+        "offline_access"
+      ]
+    },
+    {
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "User",
+      "email": "alice@demo.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "alice",
+          "temporary": false
+        }
+      ],
+      "groups": [
+        "Users"
+      ],
+      "realmRoles": [
+        "default-roles-demo",
+        "offline_access"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "backend",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "secret": "secret",
+      "redirectUris": [
+        "http://localhost:8081/*"
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "groups",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "company_read",
+        "company_write",
+        "profile_read",
+        "profile_write"
+      ]
+    },
+    {
+      "clientId": "web",
+      "enabled": true,
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "groups",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "company_read",
+        "company_write",
+        "profile_read",
+        "profile_write"
+      ]
+    },
+    {
+      "clientId": "test",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "secret": "secret",
+      "redirectUris": [
+        "http://localhost:8081/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8081"
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "groups",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "company_read",
+        "company_write",
+        "profile_read",
+        "profile_write"
+      ]
+    }
+  ]
+}

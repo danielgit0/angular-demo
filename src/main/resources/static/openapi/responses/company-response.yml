@@ -1,0 +1,38 @@
+components:
+  schemas:
+    CompanyResponse:
+      title: CompanyResponse
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        contactPerson:
+          $ref: '#/components/schemas/CompanyContactPersonResponse'
+    CompanyContactPersonResponse:
+      title: CompanyContactPersonResponse
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        number:
+          type: string
+        email:
+          type: string
+    CompaniesResponse:
+      title: CompaniesResponse
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyResponse'
+        pagination:
+          $ref: './pagination-response.yml#/components/schemas/PaginationResponse'

@@ -1,0 +1,39 @@
+components:
+  schemas:
+    ProfileResponse:
+      title: ProfileResponse
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        number:
+          type: string
+        type:
+          type: string
+        email:
+          type: string
+          format: email
+    ProfileJobResponse:
+      title: ProfileJobResponse
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ProfilesResponse:
+      title: ProfilesResponse
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileResponse'
+        pagination:
+          $ref: './pagination-response.yml#/components/schemas/PaginationResponse'

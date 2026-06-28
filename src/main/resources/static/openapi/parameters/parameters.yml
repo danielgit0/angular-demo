@@ -1,0 +1,53 @@
+components:
+  parameters:
+    idPath:
+      name: id
+      in: path
+      required: true
+      description: The id
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+    profileTypeQuery:
+      name: profileType
+      in: query
+      required: false
+      description: Profile type (EMPLOYER or EMPLOYEE)
+      schema:
+        type: string
+        enum:
+          - EMPLOYER
+          - EMPLOYEE
+    companyIdQuery:
+      name: companyId
+      in: query
+      required: false
+      description: The list of companies uuids
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+          minLength: 1
+      style: form
+      explode: true
+    pageQuery:
+      name: page
+      in: query
+      description: Page number (0-based)
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    pageSizeQuery:
+      name: pageSize
+      in: query
+      description: Page size
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 50

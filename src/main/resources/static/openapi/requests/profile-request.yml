@@ -1,0 +1,25 @@
+components:
+  schemas:
+    ProfileCreateRequest:
+      title: ProfileCreateRequest
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        number:
+          type: string
+    ProfileUpdateRequest:
+      title: ProfileUpdateRequest
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        number:
+          type: string

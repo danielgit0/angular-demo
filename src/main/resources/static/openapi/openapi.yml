@@ -1,0 +1,477 @@
+openapi: 3.1.0
+info:
+  title: Secure Backend Service API
+  version: 1.0.0-SNAPSHOT
+  description: Basic secure backend service
+  license:
+    name: MIT
+    url: http://localhost:8081/license
+servers:
+  - url: '{secure-backend}'
+    variables:
+      secure-backend:
+        enum:
+          - http://localhost:8081
+        default: http://localhost:8081
+paths:
+  /api/v1/profiles:
+    get:
+      tags:
+        - Profile
+      summary: Retrieve profiles information
+      description: >
+        Retrieve a profile's information by providing one of the following query parameters: `jobs`, `provinceId`, `cantonId`, `districtId`
+      operationId: getProfiles
+      security:
+        - oauth:
+            - profile_read
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/profileTypeQuery'
+        - $ref: './parameters/parameters.yml#/components/parameters/pageQuery'
+        - $ref: './parameters/parameters.yml#/components/parameters/pageSizeQuery'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: './responses/profile-response.yml#/components/schemas/ProfilesResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    post:
+      tags:
+        - Profile
+      summary: Create a profile
+      description: Create a profile
+      operationId: createProfile
+      security:
+        - oauth:
+            - profile_write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './requests/profile-request.yml#/components/schemas/ProfileCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: './responses/profile-response.yml#/components/schemas/ProfileResponse'
+        '401':
+          description: Unautorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+  /api/v1/profiles/{id}:
+    get:
+      tags:
+        - Profile
+      summary: Retrieve a profile by id information
+      description: Retrieve a single profile by id
+      operationId: getProfile
+      security:
+        - oauth:
+            - profile_read
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: './responses/profile-response.yml#/components/schemas/ProfileResponse'
+        '401':
+          description: Unautorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    put:
+      tags:
+        - Profile
+      summary: Update a profile
+      description: Update a profile
+      operationId: updateProfile
+      security:
+        - oauth:
+            - profile_write
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './requests/profile-request.yml#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: './responses/profile-response.yml#/components/schemas/ProfileResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    delete:
+      tags:
+        - Profile
+      summary: Delete a profile
+      description: Delete a profile
+      operationId: deleteProfile
+      security:
+        - oauth:
+            - profile_write
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+  /api/v1/companies:
+    get:
+      tags:
+        - Company
+      summary: Retrieve all companies
+      description: Retrieve all companies
+      operationId: getCompanies
+      security:
+        - oauth:
+            - company_read
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/pageQuery'
+        - $ref: './parameters/parameters.yml#/components/parameters/pageSizeQuery'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: './responses/company-response.yml#/components/schemas/CompaniesResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    post:
+      tags:
+        - Company
+      summary: Create a new company
+      description: Create a new company
+      operationId: createCompany
+      security:
+        - oauth:
+          - company_write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './requests/company-request.yml#/components/schemas/CompanyCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: './responses/company-response.yml#/components/schemas/CompanyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+  /api/v1/companies/{id}:
+    get:
+      tags:
+        - Company
+      summary: Retrieve a company by id
+      description: Retrieve a single company by id
+      operationId: getCompany
+      security:
+        - oauth:
+            - company_read
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: './responses/company-response.yml#/components/schemas/CompanyResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Nor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    put:
+      tags:
+        - Company
+      summary: Update a company
+      description: Update a company
+      operationId: updateCompany
+      security:
+        - oauth:
+            - company_write
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './requests/company-request.yml#/components/schemas/CompanyUpdateRequest'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: './responses/company-response.yml#/components/schemas/CompanyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+    delete:
+      tags:
+        - Company
+      summary: Delete a company
+      description: Delete a company
+      operationId: deleteCompany
+      security:
+        - oauth:
+            - company_write
+      parameters:
+        - $ref: './parameters/parameters.yml#/components/parameters/idPath'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+        default:
+          description: Error Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageBody'
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:8080/realms/demo/protocol/openid-connect/token
+          scopes:
+            company_read: 'Permission to read companies.'
+            company_write: 'Permission to create/edit/delete companies.'
+            profile_read: 'Permission to read profiles.'
+            profile_write: 'Permission to create/edit/delete profiles.'
+            groups: 'Maps the groups membership to the token.'
+  schemas:
+    ErrorMessageMeta:
+      type: object
+      properties:
+        requestUri:
+          type: string
+        queryString:
+          type: string
+        exception:
+          type: string
+    ErrorMessageEntry:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+        cause:
+          type: string
+        meta:
+          $ref: "#/components/schemas/ErrorMessageMeta"
+    ErrorMessageBody:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorMessageEntry"
