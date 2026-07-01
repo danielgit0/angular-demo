@@ -1,0 +1,14 @@
+@use 'sass:color';
+
+$primary-color: blue;
+$font-stack: Helvetica, sans-serif;
+
+h1 {
+  display: block;
+  padding: 6px 12px;
+  color: blue;
+
+  &:hover {
+    background-color: color.scale($primary-color, $lightness: 10%);
+  }
+}
